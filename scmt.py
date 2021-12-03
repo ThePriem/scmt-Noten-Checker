@@ -19,7 +19,7 @@ def getGradesFromWebsite(usr,pwd):
                         level=logging.INFO)
 
 
-    driver = webdriver.Remote("http://<selenium container ip adresse>/wd/hub", DesiredCapabilities.CHROME)
+    driver = webdriver.Remote("http://192.168.178.22:4444/wd/hub", DesiredCapabilities.CHROME)
 
 
     url = "https://www.eis-scmt.com/home/lib/Controller.php?oitSource=scmt_eis&oitAction=start"
@@ -46,13 +46,14 @@ def getGradesFromWebsite(usr,pwd):
         rows = tableElement.find_elements(By.TAG_NAME,"tr")
         for row in rows:
             moduleName = row.find_elements(By.TAG_NAME,"td")[0].text
+            moduleArt = row.find_elements(By.TAG_NAME,"td")[1].text #Klausur oder TDR
             moduleGrade = row.find_elements(By.TAG_NAME,"td")[3].text
             
             #Skip if no grade available
             if moduleGrade == "":
                 continue
             
-            gradeList.append({"name":moduleName,"grade":moduleGrade})
+            gradeList.append({"name":moduleName + " - " + moduleArt,"grade":moduleGrade})
             # print(moduleName)
             # print(moduleGrade)
             # print("----")
